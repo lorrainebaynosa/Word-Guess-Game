@@ -86,8 +86,19 @@
         this.updateWins();
       },
       
-      //how do you incorporate following code as property of object? When user presses
-      //a key, it will run the following function...
+      //how do you incorporate following code as property of object? 
+      // The parameters of the event listener are event, function to run, useCapture (optional).
+      // This event listener runs checkKeyPress function when a key has been released
+
+      
+      document.addEventListener("keyup", checkKeyPress, false);
+
+      function checkKeyPress(key){
+        if (key.keyCode == ){
+          return "The a letter key has been pressed.";
+        }
+      }
+      
       document.onkeyup = function(event){
 
       // If there are no more words, stop the function.
