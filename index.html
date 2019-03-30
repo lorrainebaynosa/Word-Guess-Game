@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>Hangman</title>
+</head>
+
+<body>
+  <div id=container></div>
+
+  <div>
+      <h1>Hangman Game - Game of Thrones!</h1>
+    <p id="directions-text">Guess words associated with the G. Press any key to get started!</p>
+    <p id="wins"></p>
+    <p id="word"></p>
+    <script>
+
+      // PROPERTIES:VALUES for object "game"
+      // ========================================================================== 
+      var game = {
+      
+      words: ["targaryen", "lannister", "stark", "bolton", "baratheon"],
+      wordIndex: 0, 
+      arrayLettersOfWord: [],
+      displayWord: "", //value of property "displayWord" is ""
+      guessesTaken: 0, //value of property "guessesTaken" is 0  
+      wins: 0, //value of property "wins" is 0, or number of times user guessed word correctly.
+      userInput: "",
+      totalGuesses: 0,
+
+      //FUNCTIONS
+      // ========================================================================== 
+      //Function to render word. If there are still more words, render the next one.
+      //If there are no more words to render, render end of game screen.
+      // Function to render words.
+
+      renderWord: function (){
+        if(wordIndex<= words.length-1){
+        document.querySelector("#word").innerHTML=words[wordIndex];
+      }
+        else {
+        document.querySelector("#word").innerHTML = "Game Over!";
+        document.querySelector("#wins").innerHTML = "Final Wins:" + wins + "out of" + words.length;
+        }
+      },
+      
+      //Function that allows letters of word to be seen treated as array
+      arrayLettersOfWord: function(){
+        this.arrayLettersOfWord = this.wordIndex.split(""); //creates an array of letters for word
+      },
+
+      setupForDisplayWord: function(){
+        var underlineWord = ""
+        for (var i = 0; i <this.word.length; i++){
+          underlineWord = underlineWord + "_"; //creates underline for each letter of word
+        }
+        this.displayWord = underlineWord; 
+      },
+
+      showDisplayWord: function(){
+        var index = this.word.indexOf(this.guess);
+        WWCWord = this.displayWord.split("");
+        WWCWord[index] = this.guess;
+        WWCWord = WWCword.concatenate("")
+
+        this.displayWord = WWCWord;
+      },
+
+      // Function that updates the wins...
+      updateWins: function() {
+        document.querySelector("#wins").innerHTML = "Wins: " + wins;
+      },
+      
+      //MAIN PROCESS
+      // ========================================================================== 
+      //Calling functions to start the game.
+      
+      start: function (){
+        this.renderWord();
+        this.arrayLettersOfWord();
+        this.setupForDisplayWord();
+        this.updateWins();
+      },
+      
+      //how do you incorporate following code as property of object? When user presses
+      //a key, it will run the following function...
+      document.onkeyup = function(event){
+
+      // If there are no more words, stop the function.
+       if (wordIndex === words.length) {
+          return;
+        }
+      // Determine which key was pressed, make it lowercase, and set it to the userInput variable.
+      var userInput = event.key.toLowerCase();
+    
+      //If game over by exceeding allowable guesses
+        if (this.guessesTaken == this.totalGuesses){
+          alert("Game over. Sorry, you guessed incorrectly too many times.");
+        }
+      
+      //determine if letter guessed is in the index of word; will be -1 if incorrect
+      var i = this.arrayLettersOfWord.indexOf(this.userInput)
+      if (i !== -1){
+        this.showDisplayWord();
+        this.arrayLettersOfWord.splice(i, 1) //removes 1 item from index i
+        this.wins++;
+      } else {
+        this.guessesTaken++;
+      }
+      
+    </script>
+
+</body>
+
+</html>
