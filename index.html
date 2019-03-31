@@ -10,119 +10,95 @@
 </head>
 
 <body>
-  <div id=container></div>
-
-  <div>
-      <h1>Hangman Game - Game of Thrones!</h1>
-    <p id="directions-text">Guess words associated with the G. Press any key to get started!</p>
+  <div id="container"></div>
+  <div id="header"></div>
+      <h1>Hangman Game - Game of Thrones!</h1>  
+    <p> Guess words associated with the G. Press any key to get started!</p>
     <p id="wins"></p>
     <p id="word"></p>
     <script>
 
-      // PROPERTIES:VALUES for object "game"
-      // ========================================================================== 
-      var game = {
+      var words = ["targaryen", "lannister", "stark", "bolton", "baratheon"];
+      var currentWord = ""
+      var guessesTaken = 0; //value of property "guessesTaken" is 0  
+      var wins = 0; //value of property "wins" is 0, or number of times user guessed word correctly.
+      var userInput  = [];
+      var totalGuesses = 0;
+      var gameInProgress = false;
+      var maxGuesses = 12;
+      var guessedCorrectly = false;
       
-      words: ["targaryen", "lannister", "stark", "bolton", "baratheon"],
-      wordIndex: 0, 
-      arrayLettersOfWord: [],
-      displayWord: "", //value of property "displayWord" is ""
-      guessesTaken: 0, //value of property "guessesTaken" is 0  
-      wins: 0, //value of property "wins" is 0, or number of times user guessed word correctly.
-      userInput: "",
-      totalGuesses: 0,
-
-      //FUNCTIONS
-      // ========================================================================== 
-      //Function to render word. If there are still more words, render the next one.
-      //If there are no more words to render, render end of game screen.
-      // Function to render words.
-
-      renderWord: function (){
-        if(wordIndex<= words.length-1){
-        document.querySelector("#word").innerHTML=words[wordIndex];
+      function selectRandomWord(words) {
+        var numberOfChoices = words.length;
+        var randomIndex = Math.floor(Math.random() * numberOfChoices);
+        return words[randomIndex];  
       }
+
+      function startNewGame() {
+        currentWord = selectRandomWord(words);
+        guessesTaken = 0;
+        userInput = [];
+        totalGuesses = 0;
+        gameInProgress = true;
+        guessedCorrectly = false;
+        console.log('New game started');
+      }
+
+      function playGame() {
+        if (userInput.includes(event.key)) {
+          console.log("event key already in guesses.")
+        } else {
+
+          userInput.push(event.key)
+          totalGuesses++
+          console.log("userInput ", userInput)
+          console.log("totalGuesses ", totalGuesses)
+        renderWord()
+        }
+      }
+
+      function renderWord(){
+        var result = "";
+        var incorrectGuesses = 0;
+        for (var i=0; i<currentWord.length; i++){
+          var currentLetter = currentWord.charAt(i);
+          if (userInput.includes(currentLetter)) {
+            result += currentLetter;
+          } else {
+            result += "?";
+            incorrectGuesses++;
+          }
+        }
+        console.log(result);
+        if (incorrectGuesses === 0){
+          winner()
+        }
+      }
+
+      function endGame() {
+        gameInProgress = false;
+        console.log('you lose');
+      }
+      
+      function winner(){
+        gameInProgress = false;
+        console.log("you win")
+      }
+        
+      document.addEventListener('keyup', function(event){
+        if (gameInProgress === false) {
+          startNewGame();
+        }
         else {
-        document.querySelector("#word").innerHTML = "Game Over!";
-        document.querySelector("#wins").innerHTML = "Final Wins:" + wins + "out of" + words.length;
+          if (totalGuesses >= maxGuesses) {
+            endGame()
+          } 
+          else {
+            playGame();
+          }
         }
-      },
-      
-      //Function that allows letters of word to be seen treated as array
-      arrayLettersOfWord: function(){
-        this.arrayLettersOfWord = this.wordIndex.split(""); //creates an array of letters for word
-      },
+      });
 
-      setupForDisplayWord: function(){
-        var underlineWord = ""
-        for (var i = 0; i <this.word.length; i++){
-          underlineWord = underlineWord + "_"; //creates underline for each letter of word
-        }
-        this.displayWord = underlineWord; 
-      },
-
-      showDisplayWord: function(){
-        var index = this.word.indexOf(this.guess);
-        WWCWord = this.displayWord.split("");
-        WWCWord[index] = this.guess;
-        WWCWord = WWCword.concatenate("")
-
-        this.displayWord = WWCWord;
-      },
-
-      // Function that updates the wins...
-      updateWins: function() {
-        document.querySelector("#wins").innerHTML = "Wins: " + wins;
-      },
-      
-      //MAIN PROCESS
-      // ========================================================================== 
-      //Calling functions to start the game.
-      
-      start: function (){
-        this.renderWord();
-        this.arrayLettersOfWord();
-        this.setupForDisplayWord();
-        this.updateWins();
-      },
-      
-      //how do you incorporate following code as property of object? 
-      // The parameters of the event listener are event, function to run, useCapture (optional).
-      // This event listener runs checkKeyPress function when a key has been released
-
-      
-      document.addEventListener("keyup", checkKeyPress, false);
-
-      function checkKeyPress(key){
-        if (key.keyCode == ){
-          return "The a letter key has been pressed.";
-        }
-      }
-      
-      document.onkeyup = function(event){
-
-      // If there are no more words, stop the function.
-       if (wordIndex === words.length) {
-          return;
-        }
-      // Determine which key was pressed, make it lowercase, and set it to the userInput variable.
-      var userInput = event.key.toLowerCase();
-    
-      //If game over by exceeding allowable guesses
-        if (this.guessesTaken == this.totalGuesses){
-          alert("Game over. Sorry, you guessed incorrectly too many times.");
-        }
-      
-      //determine if letter guessed is in the index of word; will be -1 if incorrect
-      var i = this.arrayLettersOfWord.indexOf(this.userInput)
-      if (i !== -1){
-        this.showDisplayWord();
-        this.arrayLettersOfWord.splice(i, 1) //removes 1 item from index i
-        this.wins++;
-      } else {
-        this.guessesTaken++;
-      }
-      
     </script>
 
 </body>
