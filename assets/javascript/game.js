@@ -1,53 +1,100 @@
+var MAX_GUESSES = 12;
 
-// Creates an array that lists out all of the options (Rock, Paper, or Scissors).
-var computerChoices = ["r", "p", "s"];
+      var words = ["targaryen", "lannister", "stark", "bolton", "baratheon"];
+      var currentWord = ""   
+      var wins = 0; 
+      var userInput = [];
+      var totalGuesses = 0;
+      var gameInProgress = false;
+      var guessedCorrectly = false;
 
-// Creating variables to hold the number of wins, losses, and ties. They start at 0.
-var wins = 0;
-var losses = 0;
-var ties = 0;
+      function selectRandomWord(wordChoices) {
+        var numberOfChoices = wordChoices.length;
+        var randomIndex = Math.floor(Math.random() * numberOfChoices);
+        return wordChoices[randomIndex];
+      }
 
-// Create variables that hold references to the places in the HTML where we want to display things.
-var directionsText = document.getElementById("directions-text");
-var userChoiceText = document.getElementById("userchoice-text");
-var computerChoiceText = document.getElementById("computerchoice-text");
-var winsText = document.getElementById("wins-text");
-var lossesText = document.getElementById("losses-text");
-var tiesText = document.getElementById("ties-text");
+      function startNewGame() {
+        gameInProgress = true;
+        guessedCorrectly = false;
+        currentWord = selectRandomWord(words);
+        guessesTaken = 0;
+        totalGuesses = 0;
+        userInput = [];
+        renderWord();
+        //reset gameboard//
+        document.querySelector("#num-guesses-remaining").innerHTML = MAX_GUESSES;
+        document.querySelector("#letters-guessed").innerHTML = "";
+        document.querySelector("#message").innerHTML = "";
+        console.log("New game started");
+      }
 
-// This function is run whenever the user presses a key.
-document.onkeyup = function (event) {
+      function playGame() {
+        if (userInput.includes(event.key)) {
+          console.log("event key already in guesses.");
+          document.querySelector("#message").innerHTML = "You already guessed " + event.key;
+        } else {
+          document.querySelector("#message").innerHTML = ""
+          userInput.push(event.key);
+          totalGuesses++;
+          console.log("userInput ", userInput);
+          console.log("totalGuesses ", totalGuesses);
+          document.querySelector("#num-guesses-remaining").innerHTML = MAX_GUESSES - totalGuesses;
+          renderWord();
+        }
+      }
 
-  // Determines which key was pressed.
-  var userGuess = event.key;
+      function renderWord() {
+        var result = "";
+        var incorrectGuesses = 0;
+        for (var i = 0; i < currentWord.length; i++) {
+          var currentLetter = currentWord.charAt(i);
+          if (userInput.includes(currentLetter)) {
+            result = result + currentLetter;
+          } else {
+            result = result + "_";
+            incorrectGuesses++;
+          }
+        }
+        console.log(result);
+        document.querySelector("#current-word").innerHTML = result;
+        document.querySelector("#letters-guessed").innerHTML = userInput.toString();
+        if (incorrectGuesses === 0) {
+          winner();
+        }
+        //testing if lose after 12th wrong guess
+        if ((MAX_GUESSES - totalGuesses) === 0 && incorrectGuesses > 0){
+          endGame();
+        }
+      }
 
-  // Randomly chooses a choice from the options array. This is the Computer's guess.
-  var computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)];
+      function endGame() {
+        gameInProgress = false;
+        console.log("you lose");
+        document.querySelector("#message").innerHTML = "You lose! Brush up on GOT!"
+      }
 
-  // Reworked our code from last step to use "else if" instead of lots of if statements.
+      function winner() {
+        gameInProgress = false;
+        wins++;
+        console.log("you win");
+        document.querySelector("#wins").innerHTML = wins;
+        document.querySelector("#message").innerHTML = "You win! Congratulations"
+      }
 
-  // This logic determines the outcome of the game (win/loss/tie), and increments the appropriate number
-  if ((userGuess === "r") || (userGuess === "p") || (userGuess === "s")) {
+      document.addEventListener('keyup', function (event) {
+        if (gameInProgress === false) {
+          startNewGame();
+        }
+        else {
+          if (totalGuesses >= MAX_GUESSES) {
+            endGame()
+          }
+          else {
+            playGame();
+          }
+        }
+      });
 
-    if ((userGuess === "r" && computerGuess === "s") ||
-      (userGuess === "s" && computerGuess === "p") ||
-      (userGuess === "p" && computerGuess === "r")) {
-      wins++;
-    } else if (userGuess === computerGuess) {
-      ties++;
-    } else {
-      losses++;
-    }
-
-    // Hide the directions
-    directionsText.textContent = "";
-
-    // Display the user and computer guesses, and wins/losses/ties.
-    userChoiceText.textContent = "You chose: " + userGuess;
-    computerChoiceText.textContent = "The computer chose: " + computerGuess;
-    winsText.textContent = "wins: " + wins;
-    lossesText.textContent = "losses: " + losses;
-    tiesText.textContent = "ties: " + ties;
-  }
-};
+  
 
