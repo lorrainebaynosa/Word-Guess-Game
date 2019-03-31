@@ -1,0 +1,103 @@
+@media(min-width: 768px){
+.container1, .container2 {
+    display: flex;
+    
+}
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background-image: url(https://image.shutterstock.com/image-photo/winter-coming-text-scene-background-260nw-543528610.jpg);
+    margin: 0;
+    padding: 0;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: #777777;
+}
+
+.wrapper {
+    min-height: 100%;
+    margin-bottom: -60px;
+    text-align: center;
+    overflow: auto;
+}
+
+.container1 {
+margin-bottom: 50px;
+}
+
+.container2 {
+    justify-content: space-around;
+    height: 450px;
+}
+
+.container1 div, .container2 div {
+    border: 5px, solid, #666666, medium;
+    padding: 10px;
+    background: lightcyan;
+}
+
+.header {
+    border: 5px, black, medium;
+    flex: 1;
+    margin: 3px; 
+    background: lightcyan;
+    text-align: center;
+    font-size: 40px;
+    line-height: 50px;
+    font-style: bold;
+    box-sizing: border-box;
+}
+
+.images {
+    flex: 2;
+}
+
+.mainContent {
+    flex: 1;
+}
+
+p {
+    text-align: center;
+    font-size: 25px;
+    line-height: 38px;
+    font-style: bold;
+}
+
+.current-word {
+    letter-spacing: 30px;
+}
+
+
+.clearfix ::after {
+    content: " ";
+    clear: both; 
+    display: table;
+}
+
+
+#container:after {
+    content: "";
+    display: block;
+}
+
+#GOT, #targaryen, #lannister {
+    width: 250px;
+    height: 200px;
+    padding: 10px;
+    align-items: center;
+}
+#stark, #bolton, #baratheon {
+    width: 250px;
+    height: 200px;
+    padding: 10px;
+    align-items: center;
+}
