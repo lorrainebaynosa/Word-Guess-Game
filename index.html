@@ -5,94 +5,129 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  
   <title>Hangman</title>
-</head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/reset.css">
+  <style> 
+  .current-word {
+    letter-spacing: 20px;
+  }
+
+  </style>
+  </head>
+
 
 <body>
-  <div id="container"></div>
-  <div id="header"></div>
-      <h1>Hangman Game - Game of Thrones!</h1>  
-    <p> Guess words associated with the G. Press any key to get started!</p>
-    <p id="wins"></p>
-    <p id="word"></p>
+  <div class="wrapper">
+    <div class="container">
+      <section class="row">
+        <div class="col-md-6">
+            <h1>Hangman Game - Game of Thrones!</h1>
+          <p> Guess words associated with the G. Press any key to get started!</p>
+          <p id="wins">0</p>
+          <p id="current-word" class="current-word"></p>
+          <p id="num-guesses-remaining">12</p>
+          <p id="letters-guessed">0</p>
+          <p id="message"></p>
+        </div>
+      </section> 
+    </div>
+  
     <script>
+      var MAX_GUESSES = 12;
 
       var words = ["targaryen", "lannister", "stark", "bolton", "baratheon"];
-      var currentWord = ""
-      var guessesTaken = 0; //value of property "guessesTaken" is 0  
-      var wins = 0; //value of property "wins" is 0, or number of times user guessed word correctly.
-      var userInput  = [];
+      var currentWord = ""   
+      var wins = 0; 
+      var userInput = [];
       var totalGuesses = 0;
       var gameInProgress = false;
-      var maxGuesses = 12;
       var guessedCorrectly = false;
-      
-      function selectRandomWord(words) {
-        var numberOfChoices = words.length;
+
+      function selectRandomWord(wordChoices) {
+        var numberOfChoices = wordChoices.length;
         var randomIndex = Math.floor(Math.random() * numberOfChoices);
-        return words[randomIndex];  
+        return wordChoices[randomIndex];
       }
 
       function startNewGame() {
-        currentWord = selectRandomWord(words);
-        guessesTaken = 0;
-        userInput = [];
-        totalGuesses = 0;
         gameInProgress = true;
         guessedCorrectly = false;
-        console.log('New game started');
+        currentWord = selectRandomWord(words);
+        guessesTaken = 0;
+        totalGuesses = 0;
+        userInput = [];
+        renderWord();
+        //reset gameboard//
+        document.querySelector("#num-guesses-remaining").innerHTML = MAX_GUESSES;
+        document.querySelector("#letters-guessed").innerHTML = "";
+        document.querySelector("#message").innerHTML = "";
+        console.log("New game started");
       }
 
       function playGame() {
         if (userInput.includes(event.key)) {
-          console.log("event key already in guesses.")
+          console.log("event key already in guesses.");
+          document.querySelector("#message").innerHTML = "You already guessed " + event.key;
         } else {
-
-          userInput.push(event.key)
-          totalGuesses++
-          console.log("userInput ", userInput)
-          console.log("totalGuesses ", totalGuesses)
-        renderWord()
+          document.querySelector("#message").innerHTML = ""
+          userInput.push(event.key);
+          totalGuesses++;
+          console.log("userInput ", userInput);
+          console.log("totalGuesses ", totalGuesses);
+          document.querySelector("#num-guesses-remaining").innerHTML = MAX_GUESSES - totalGuesses;
+          renderWord();
         }
       }
 
-      function renderWord(){
+      function renderWord() {
         var result = "";
         var incorrectGuesses = 0;
-        for (var i=0; i<currentWord.length; i++){
+        for (var i = 0; i < currentWord.length; i++) {
           var currentLetter = currentWord.charAt(i);
           if (userInput.includes(currentLetter)) {
-            result += currentLetter;
+            result = result + currentLetter;
           } else {
-            result += "?";
+            result = result + "_";
             incorrectGuesses++;
           }
         }
         console.log(result);
-        if (incorrectGuesses === 0){
-          winner()
+        document.querySelector("#current-word").innerHTML = result;
+        document.querySelector("#letters-guessed").innerHTML = userInput.toString();
+        if (incorrectGuesses === 0) {
+          winner();
+        }
+        //testing if lose after 12th wrong guess
+        if ((MAX_GUESSES - totalGuesses) === 0 && incorrectGuesses > 0){
+          endGame();
         }
       }
 
       function endGame() {
         gameInProgress = false;
-        console.log('you lose');
+        console.log("you lose");
+        document.querySelector("#message").innerHTML = "You lose! Brush up on GOT!"
       }
-      
-      function winner(){
+
+      function winner() {
         gameInProgress = false;
-        console.log("you win")
+        wins++;
+        console.log("you win");
+        document.querySelector("#wins").innerHTML = wins;
+        document.querySelector("#message").innerHTML = "You win! Congratulations"
       }
-        
-      document.addEventListener('keyup', function(event){
+
+      document.addEventListener('keyup', function (event) {
         if (gameInProgress === false) {
           startNewGame();
         }
         else {
-          if (totalGuesses >= maxGuesses) {
+          if (totalGuesses >= MAX_GUESSES) {
             endGame()
-          } 
+          }
           else {
             playGame();
           }
