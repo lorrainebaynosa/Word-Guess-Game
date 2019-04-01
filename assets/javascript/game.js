@@ -1,5 +1,7 @@
 
     var MAX_GUESSES = 12;
+    var IMG_ROOT = "assets/images/";
+
 
     var words = ["targaryen", "lannister", "stark", "bolton", "baratheon"];
     var currentWord = ""
@@ -23,24 +25,54 @@
       totalGuesses = 0;
       userInput = [];
       renderWord();
-      //reset gameboard//
-      document.querySelector("#num-guesses-remaining").innerHTML = MAX_GUESSES;
-      document.querySelector("#letters-guessed").innerHTML = "";
-      document.querySelector("#message").innerHTML = "";
+      resetGameBoard();
       console.log("New game started");
+    }
+
+    function resetGameBoard() {
+      updateNumGuessesRemaining(MAX_GUESSES);
+      updateLettersGuessed("");
+      updateMessage("");
+      updateCurrentWord("");
+      setImage(IMG_ROOT + "gameOfThrones.jpg", "Game of Thrones");
+    }
+
+    function setImage(src, alt) {
+      var imgDivId = document.querySelector("#GOT");
+      imgDivId.src = src;
+      imgDivId.alt = alt;
+    }
+
+    function updateWins(num) {
+      document.querySelector("#wins").innerHTML = num;
+    }
+
+    function updateMessage(msg) {
+      document.querySelector("#message").innerHTML = msg;
+    }
+
+    function updateNumGuessesRemaining(num) {
+      document.querySelector("#num-guesses-remaining").innerHTML = num;
+    }
+
+    function updateLettersGuessed(letters) {
+      document.querySelector("#letters-guessed").innerHTML = letters;
+    }
+    function updateCurrentWord(word) {
+      document.querySelector("#current-word").innerHTML = word;
     }
 
     function playGame() {
       if (userInput.includes(event.key)) {
         console.log("event key already in guesses.");
-        document.querySelector("#message").innerHTML = "You already guessed " + event.key;
+        updateMessage("You already guessed " + event.key);
       } else {
-        document.querySelector("#message").innerHTML = "";
+        updateMessage("");
         userInput.push(event.key);
         totalGuesses++;
         console.log("userInput ", userInput);
         console.log("totalGuesses ", totalGuesses);
-        document.querySelector("#num-guesses-remaining").innerHTML = MAX_GUESSES - totalGuesses;
+        updateNumGuessesRemaining(MAX_GUESSES - totalGuesses);
         renderWord();
       }
     }
@@ -58,12 +90,12 @@
         }
       }
       console.log(result);
-      document.querySelector("#current-word").innerHTML = result;
+      updateCurrentWord(result); 
       var userInputWord = "";
       for (var i = 0; i < userInput.length; i++) {
         userInputWord = userInputWord + userInput[i];
       }
-      document.querySelector("#letters-guessed").innerHTML = userInputWord.toUpperCase();
+      updateLettersGuessed(userInputWord.toUpperCase());
       if (incorrectGuesses === 0) {
         winner();
       }
@@ -76,15 +108,17 @@
     function endGame() {
       gameInProgress = false;
       console.log("you lose");
-      document.querySelector("#message").innerHTML = "You lose! Brush up on GOT!";
+      updateMessage("You lose! " + currentWord + " was the answer.");
+      setImage(IMG_ROOT + currentWord + ".jpg", currentWord);
     }
 
     function winner() {
       gameInProgress = false;
       wins++;
       console.log("you win");
-      document.querySelector("#wins").innerHTML = wins;
-      document.querySelector("#message").innerHTML = "You win! Congratulations";
+      updateWins(wins);
+      updateMessage("You win! Congratulations!");
+      setImage(IMG_ROOT + currentWord + ".jpg", currentWord);
     }
 
     document.addEventListener('keyup', function (event) {
