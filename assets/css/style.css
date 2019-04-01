@@ -61,6 +61,7 @@ margin-bottom: 50px;
     flex: 2;
 }
 
+
 .mainContent {
     flex: 1;
 }
@@ -90,7 +91,7 @@ p {
 }
 
 #GOT, #targaryen, #lannister, #stark, #bolton, #baratheon {
-    width: 285px;
-    height: 215px;
+    width: 250px;
+    height: 210px;
     padding: 20x;
 }
