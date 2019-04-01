@@ -2,9 +2,8 @@
     var MAX_GUESSES = 12;
     var IMG_ROOT = "assets/images/";
 
-
     var words = ["targaryen", "lannister", "stark", "bolton", "baratheon"];
-    var currentWord = ""
+    var currentWord = "";
     var wins = 0;
     var userInput = [];
     var totalGuesses = 0;
@@ -26,7 +25,6 @@
       userInput = [];
       renderWord();
       resetGameBoard();
-      console.log("New game started");
     }
 
     function resetGameBoard() {
@@ -64,14 +62,11 @@
 
     function playGame() {
       if (userInput.includes(event.key)) {
-        console.log("event key already in guesses.");
         updateMessage("You already guessed " + event.key);
       } else {
         updateMessage("");
         userInput.push(event.key);
         totalGuesses++;
-        console.log("userInput ", userInput);
-        console.log("totalGuesses ", totalGuesses);
         updateNumGuessesRemaining(MAX_GUESSES - totalGuesses);
         renderWord();
       }
@@ -89,7 +84,7 @@
           incorrectGuesses++;
         }
       }
-      console.log(result);
+      
       updateCurrentWord(result); 
       var userInputWord = "";
       for (var i = 0; i < userInput.length; i++) {
@@ -107,7 +102,6 @@
 
     function endGame() {
       gameInProgress = false;
-      console.log("you lose");
       updateMessage("You lose! " + currentWord + " was the answer.");
       setImage(IMG_ROOT + currentWord + ".jpg", currentWord);
     }
@@ -115,7 +109,6 @@
     function winner() {
       gameInProgress = false;
       wins++;
-      console.log("you win");
       updateWins(wins);
       updateMessage("You win! Congratulations!");
       setImage(IMG_ROOT + currentWord + ".jpg", currentWord);
@@ -127,7 +120,7 @@
       }
       else {
         if (totalGuesses >= MAX_GUESSES) {
-          endGame()
+          endGame();
         }
         else {
           playGame();
