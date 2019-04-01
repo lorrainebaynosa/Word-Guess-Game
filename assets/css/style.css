@@ -5,11 +5,6 @@
 }
 }
 
-* {
-    margin: 0;
-    padding: 0;
-}
-
 html, body {
     height: 100%;
     margin: 0;
@@ -31,24 +26,26 @@ body {
 }
 
 .container1 {
-margin-bottom: 50px;
+margin-bottom: 10px;
 }
 
 .container2 {
-    justify-content: space-around;
-    height: 450px;
+    justify-content: space-between;
+    height: 490px;
+    padding-bottom: 20px;
+    
 }
 
 .container1 div, .container2 div {
-    border: 5px, solid, #666666, medium;
-    padding: 10px;
+    padding: 15px;
     background: lightcyan;
+    border: 5px, solid, #666666, medium;
 }
 
 .header {
     border: 5px, black, medium;
     flex: 1;
-    margin: 3px; 
+    margin: 0 px, 0px, 5px, 0px; 
     background: lightcyan;
     text-align: center;
     font-size: 40px;
@@ -60,7 +57,6 @@ margin-bottom: 50px;
 .images {
     flex: 2;
 }
-
 
 .mainContent {
     flex: 1;
@@ -77,21 +73,20 @@ p {
     letter-spacing: 30px;
 }
 
-
+/*
 .clearfix ::after {
     content: " ";
     clear: both; 
     display: table;
 }
 
-
 #container:after {
     content: "";
     display: block;
 }
-
+*/
 #GOT, #targaryen, #lannister, #stark, #bolton, #baratheon {
-    width: 250px;
-    height: 210px;
+    width: 270px;
+    height: 220px;
     padding: 20x;
 }
